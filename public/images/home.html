@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>~Home~</title>
+        <link rel="stylesheet" type="text/css" href="home.css">
+        <link rel="stylesheet" href="https://use.typekit.net/piq2hhe.css">
+    </head>
+
+    <body>
+
+        <!--The top container has the logo (which is also the home button), the website's title, and sign up and login buttons-->
+        <section class="top-container">
+            <div class="logo-container">
+                <a class="menu-button" href="home.html">
+                    <img class="logo" src="images/logo.jpg" alt="Home">
+                </a>
+            </div>
+
+            <div class="title-container">
+                <h1>Insert Title Here :)</h1>
+            </div>
+
+            <div class="menu-container">
+                <a class="menu-button" href="post.html">Post</a>
+                <a class="menu-button" href="signup.html">Sign Up</a>
+                <a class="menu-button" href="login.html">Login</a>
+            </div>
+        </section>
+
+        <br><br><br><br><br><br><br><br>
+
+        <!--This is the container that every post will use-->
+        <!--Contains an album image on the left side, and a post description container-->
+        <!--The post description container has the user's name with a like count, a text box for the user to post a description and interactive buttons for users-->
+        <section class="post-container">
+
+            <div class="image-container">
+                <img class="album-image" src="images/albums/pink-floyd.jpeg" alt="tame-impala">
+            </div>
+
+            <div class="post-content"> 
+                <div class="user-info">
+                    <p>Posted by: <span class="username">User123</span></p>
+                    <p class="likes-counter">Likes: <span id="likes-count">0</span></p>
+                </div>
+                <div class="caption-section" id="caption">
+                    <p>Pink Floyd goes hard af #notavirgin</p>
+                </div>
+                <div class="comments-section" id="comments">
+                    <textarea id="comment-input" placeholder="Write your comments here!"></textarea>
+                    <button class="post-comment-button" id="post-comment">Post</button>
+                    <div class="past-comments" id="comments-list">
+                        <p><span class="username">User340</span>: yeah they do</p>
+                        <p><span class="username">User428</span>: no they do not</p>
+                    </div>
+                </div>
+                <div class="post-buttons">
+                    <button id="description-btn">Description</button>
+                    <button id="like-btn">Like</button>
+                    <button id="comments-btn">Comments</button>
+                </div>
+            </div>        
+        </section>
+        
+
+        <!--This is the container for the bottom of the page that has the About and Acknowledgements pages-->
+        <section class="bottom-container">
+            <div class="menu-container">
+                <a class="menu-button" href="about.html">About</a>
+                <a class="menu-button" href="ack.html">Acknowledgements</a>
+            </div>
+        </section>
+
+        <script> 
+            // Switches between Description and Comments 
+            document.getElementById('description-btn').addEventListener('click', function() { 
+                document.getElementById('caption').style.display = 'block'; 
+                document.getElementById('comments').style.display = 'none';
+             }); 
+             
+             document.getElementById('comments-btn').addEventListener('click', function() { 
+                document.getElementById('caption').style.display = 'none';
+                document.getElementById('comments').style.display = 'block';
+             }); 
+             
+             // Simple script to get the current amount of likes on a post and increment it by 1 
+             document.getElementById('like-btn').addEventListener('click', function() { 
+                let likesCount = document.getElementById('likes-count'); 
+                let currentCount = parseInt(likesCount.innerText); 
+
+                likesCount.innerText = currentCount + 1; 
+
+                fetch('/updateLikes', { 
+                    method: 'POST', 
+                    headers: { 'Content-Type': 'application/json' }, 
+                    body: JSON.stringify({ postId: '1', likes: currentCount + 1 }) });
+                 }); 
+                 
+                 document.getElementById('post-comment').addEventListener('click', function() { 
+                    let commentInput = document.getElementById('comment-input'); 
+                    let commentText = commentInput.value; 
+                    let commentsList = document.getElementById('comments-list'); 
+                    if (commentText.trim() !== '') { 
+                        let newComment = document.createElement('p');
+                        newComment.innerHTML = `<span class="username">Current User</span>: ${commentText}`; 
+                        commentsList.appendChild(newComment); 
+                        fetch('/addComment', { 
+                            method: 'POST', 
+                            headers: { 'Content-Type': 'application/json' }, 
+                            body: JSON.stringify({ postId: '1', comment: commentText }) }); 
+                            commentInput.value = ''; 
+                        }
+            });
+            async function fetchPostData() {
+        const response = await fetch('/getPostData', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ postId: '1' })
+        });
+        const postData = await response.json();
+        document.getElementById('likes-count').innerText = postData.likes;
+        const commentsList = document.getElementById('comments-list');
+        commentsList.innerHTML = '';
+        postData.comments.forEach(comment => {
+            let newComment = document.createElement('p');
+            newComment.innerHTML = `<span class="username">User</span>: ${comment}`;
+            commentsList.appendChild(newComment);
+        });
+    }
+
+    document.addEventListener('DOMContentLoaded', fetchPostData);
+
+    document.getElementById('like-btn').addEventListener('click', async function() {
+        let likesCount = document.getElementById('likes-count');
+        let currentCount = parseInt(likesCount.innerText);
+        likesCount.innerText = currentCount + 1;
+
+        await fetch('/updateLikes', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ postId: '1', likes: currentCount + 1 })
+        });
+    });
+
+    document.getElementById('post-comment').addEventListener('click', async function() {
+        let commentInput = document.getElementById('comment-input');
+        let commentText = commentInput.value;
+        let commentsList = document.getElementById('comments-list');
+
+        if (commentText.trim() !== '') {
+            let newComment = document.createElement('p');
+            newComment.innerHTML = `<span class="username">Current User</span>: ${commentText}`;
+            commentsList.appendChild(newComment);
+
+            await fetch('/addComment', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ postId: '1', comment: commentText })
+            });
+
+            commentInput.value = '';
+        }
+    });
+            
+        </script> 
+    </body>
+</html>
+
