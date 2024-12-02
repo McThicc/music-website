@@ -171,7 +171,7 @@
         }
 
         .post-buttons button.liked {
-            background-color: #ff4500;
+            background-color: #023a75;
         }
 
         .comments-section button{
@@ -211,7 +211,7 @@
         <!--The top container has the logo (which is also the home button), the website's title, and sign up and login buttons-->
         <section class="top-container">
             <div class="logo-container">
-                <a class="menu-button" href="home.html">
+                <a class="menu-button" href="index.ejs">
                     <img class="logo" src="images/logo.jpg" alt="Home">
                 </a>
             </div>
@@ -277,7 +277,30 @@
             </div>
         </section>
 
-        <script> 
+        <script>
+
+            let isLiked = false;
+
+            document.getElementById('like-btn').addEventListener('click', function() { 
+                let likesCount = document.getElementById('likes-count');
+                let likeBtn = document.getElementById('like-btn');
+                let currentCount = parseInt(likesCount.innerText);
+
+                if (isLiked) {
+                     // Unlike the post
+                    likesCount.innerText = currentCount - 1;
+                    likeBtn.innerText = "Like";
+                    this.classList.remove('liked');
+                    isLiked = false;
+                } else {
+                    // Like the post
+                    likesCount.innerText = currentCount + 1;
+                    likeBtn.innerText = "Liked";
+                    this.classList.add('liked');
+                    isLiked = true;
+                }
+            });
+
             // Switches between Description and Comments 
             document.getElementById('description-btn').addEventListener('click', function() { 
                 document.getElementById('caption').style.display = 'block'; 
@@ -288,14 +311,6 @@
                 document.getElementById('caption').style.display = 'none';
                 document.getElementById('comments').style.display = 'block';
              }); 
-             
-             // Simple script to get the current amount of likes on a post and increment it by 1 
-             document.getElementById('like-btn').addEventListener('click', function() { 
-                let likesCount = document.getElementById('likes-count'); 
-                let currentCount = parseInt(likesCount.innerText); 
-
-                likesCount.innerText = currentCount + 1; 
-            });
         </script> 
     </body>
 </html>
