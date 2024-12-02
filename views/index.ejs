@@ -207,11 +207,10 @@
     </style>
 
     <body>
-
         <!--The top container has the logo (which is also the home button), the website's title, and sign up and login buttons-->
         <section class="top-container">
             <div class="logo-container">
-                <a class="menu-button" href="index.ejs">
+                <a class="menu-button" href="/">
                     <img class="logo" src="images/logo.jpg" alt="Home">
                 </a>
             </div>
@@ -222,8 +221,12 @@
 
             <div class="menu-container">
                 <a class="menu-button" href="post.html">Post</a>
-                <a class="menu-button" href="signup.html">Sign Up</a>
-                <a class="menu-button" href="login.html">Login</a>
+                <% if (username) { %>
+                    <a class="menu-button" href="/dashboard">Hi, <%= username %>!</a>
+                <% } else { %>
+                    <a class="menu-button" href="/login">Login</a>
+                    <a class="menu-button" href="/signup">Sign Up</a>
+                <% } %>
             </div>
         </section>
 
@@ -247,7 +250,7 @@
                     <p>Pink Floyd goes hard af #notavirgin</p>
                 </div>
                 <div class="comments-section" id="comments">
-                    <form action="/post" method="post">
+                    <form action="/post" method="POST">
                         <input type="text" for="comments" id="comments" name="comments" placeholder="Write your comments here!"></input>
                         <button type="submit" class="post-comment-button" id="post-comment">Post</button>
                     </form>
@@ -255,7 +258,7 @@
                         <!--One of the coolest things, if this is working correctly which it was 12/1/24 10:31, it will load all comments posted regardless of if the page is refreshed or not using MongoDB-->
                         <% posts.forEach(post => { %>
                             <% if (post.comments) { %>
-                                <p><span class="username">User340</span>: <%= post.comments %></p>
+                                <p><span class="username"></span>: <%= post.comments %></p>
                             <% } %>
                         <% }) %>
                     </div>

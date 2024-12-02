@@ -1,21 +1,28 @@
+// routes/signUpRoutes.js
 const express = require('express');
-const User = require('../models/User');
 const router = express.Router();
+const User = require('../model/user');
 
-// Sign-up route
-router.post('/signup', async (req, res) => {
+// POST route for user signup
+router.post('/', async (req, res) => {
   const { username, email, password } = req.body;
+
   try {
+    // Check if the email already exists
     const existingUser = await User.findOne({ email });
     if (existingUser) {
-      return res.status(400).json({ message: 'Email already in use' });
+      return res.render('signup', { message: 'Email already registered.' });
     }
 
+    // Create new user and save to the database
     const newUser = new User({ username, email, password });
     await newUser.save();
-    res.status(201).json({ message: 'User created successfully' });
-  } catch (err) {
-    res.status(500).json({ message: 'Error creating user' });
+
+    // Redirect to the login page after successful sign-up
+    res.redirect('/login');
+  } catch (error) {
+    console.error(error);
+    res.render('signup', { message: 'Error during signup, please try again.' });
   }
 });
 
