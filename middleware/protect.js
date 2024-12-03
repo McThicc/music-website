@@ -9,6 +9,7 @@ const protect = (req, res, next) => {
   }
 
   try {
+    // I know I need to change this remind me later
     const decoded = jwt.verify(token, 'your_jwt_secret');
     req.user = decoded;
     next(); 
