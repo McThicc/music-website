@@ -23,7 +23,7 @@ async function renderIndex(req, res, message = null, error = null) {
   try {
     // Fetch posts and reverse them in memory
     const posts = await Post.find();
-    const reversedPosts = posts.reverse(); // Reverse the posts array
+    const reversedPosts = posts.toReversed(); // Reverse the posts array
     const username = req.session.username || null; 
     const userId = req.session.userId || null; // Get userId from session
     
