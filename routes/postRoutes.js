@@ -1,43 +1,61 @@
 const express = require('express');
 const Post = require('../model/model');
+const multer = require('multer');
+const path = require('path');
+
 const router = express.Router();
 
-// Function to render the index page with posts and comments
+// Configure storage for uploaded files
+const storage = multer.diskStorage({
+  destination: (req, file, cb) => {
+    cb(null, 'public/uploads');
+  },
+  filename: (req, file, cb) => {
+    cb(null, Date.now() + path.extname(file.originalname));
+  }
+});
+
+// Create the upload middleware
+const upload = multer({ storage });
+
+// Function to render the index page with posts
 async function renderIndex(req, res, message = null, error = null) {
   try {
-    const posts = await Post.find(); // Fetch all posts from the database
-    const username = req.session.username || null; // Get username if logged in
-    res.render('index', { message, error, posts, username });
+    // Fetch posts (without sorting by createdAt) and reverse them in memory
+    const posts = await Post.find();
+    const reversedPosts = posts.reverse(); // Reverse the posts array
+    const username = req.session.username || null; 
+    res.render('index', { message, error, posts: reversedPosts, username });
   } catch (err) {
     console.error('Error fetching posts:', err);
     res.status(500).render('index', { error: 'Error fetching posts', message: null, posts: [], username: null });
   }
 }
 
-// GET route for the home page
+
+// GET route for the home page (only one now)
 router.get('/', (req, res) => renderIndex(req, res));
 
-// POST route for adding a comment
-router.post('/post', async (req, res) => {
-  const { comments } = req.body;
-  const username = req.session.username || 'Anonymous'; // Fallback for guest users
+// GET route for the new post form page
+router.get('/new', (req, res) => {
+  const username = req.session.username || null;
+  res.render('newPost', { username }); 
+});
 
-  if (!comments || comments.trim() === '') {
-    return renderIndex(req, res, null, 'Comment cannot be empty.');
-  }
+// POST route for creating a new post
+router.post('/', upload.single('image'), async (req, res) => {
+  const { description } = req.body;
+  const image = req.file.filename;
 
   try {
-    const post = await Post.findOne(); // Assuming a single post exists
-    if (!post) return res.status(404).send('Post not found');
-
-    // Add comment to the post's comments array
-    post.comments.push({ username, text: comments });
-    await post.save();
-
-    res.redirect('/'); // Redirect back to index after saving
-  } catch (err) {
-    console.error('Error saving comment:', err);
-    renderIndex(req, res, null, 'Error saving comment.');
+    await Post.create({
+      image,
+      description,
+    });
+    res.redirect('/');
+  } catch (error) {
+    console.error('Error creating post:', error);
+    res.status(500).send('Error uploading post.');
   }
 });
 

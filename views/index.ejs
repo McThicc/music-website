@@ -66,18 +66,16 @@
         }
 
         .post-container { 
+            display:flex;  /* Flexbox layout to align items horizontally */
             width: auto;
-            height: 400px; 
-            background-image: url('images/backgrounds/1.jpeg'); 
-            background-repeat: no-repeat; 
-            display: flex; 
-            align-items: center; 
-            align-self: center;
-            justify-self: center;
-            justify-content: center; 
+            height: 450px;  /* Ensure the height is consistent */
+            background-image: url('images/backgrounds/1.jpeg');
+            background-repeat: no-repeat;
             padding-left: 20px;
             box-shadow: 0 4px 8px rgba(0,0,0,0.1);
             overflow: hidden;
+            justify-content: center;  /* Center content horizontally */
+            align-items: center;  /* Center content vertically */
         }
 
         .image-container {
@@ -87,18 +85,19 @@
         }
 
         .image-container img {
-            width: 300px;
-            height: 300px;
+            width: 100%;  /* Makes the image take up the full width of the container */
+            height: auto;  /* Automatically adjusts height to maintain aspect ratio */
+            max-width: 400px;  /* Maximum width to avoid very large images */
         }
 
         .post-content { 
-            width: 55%;
+            width: 55%;  /* Takes up 55% of the container's width */
             background-color: rgba(255, 255, 255, 0.8);
-            padding: 20px; 
+            padding: 20px;
             margin-right: 20px;
             display: flex;
             flex-direction: column;
-            border-radius: 8px; 
+            border-radius: 8px;
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
         }
 
@@ -221,7 +220,7 @@
 
             <div class="menu-container">
                 <% if (username) { %>
-                    <a href="/posts/new" class="menu-button">Post</a>
+                    <a class="menu-button" href="/posts/new">Post</a>
                     <a class="menu-button" href="/dashboard">Hi, <%= username %>!</a>
                 <% } else { %>
                     <a class="menu-button" href="/login">Login</a>
@@ -230,16 +229,39 @@
             </div>
         </section>
 
-        <br><br><br><br>
+        <br><br><br><br><br><br><br><br><br><br>
         <div class="posts">
             <% posts.forEach(post => { %>
-              <div class="post">
-                <img src="/uploads/<%= post.image %>" alt="Post image">
-                <p><%= post.description %></p>
-              </div>
-            <% }); %>
-          </div>
-        <br><br><br><br>
+                <section class="post-container">
+
+                    <div class="image-container">
+                      <img class="album-image" src="/uploads/<%= post.image %>" alt="album cover">
+                    </div>
+                    <div class="post-content">
+                      <div class="user-info">
+                        <p>Posted by: <span class="username">User123</span></p>
+                        <p class="likes-counter">Likes: <span id="likes-count">0</span></p>
+                      </div>
+                      <div class="caption-section" id="caption">
+                        <p><%= post.description %></p>
+                      </div>
+                      <div class="comments-section" id="comments">
+                        <form action="/post" method="POST">
+                          <input type="text" id="comments" name="comments" placeholder="Write your comments here!">
+                          <button type="submit" class="post-comment-button" id="post-comment">Post</button>
+                        </form>
+                        <div class="past-comments" id="comments-list"></div>
+                      </div>
+                      <div class="post-buttons">
+                        <button id="description-btn">Description</button>
+                        <button id="like-btn">Like</button>
+                        <button id="comments-btn">Comments</button>
+                      </div>
+                    </div>
+                </section>
+                <br><br><br><br>
+              <% }); %>
+        </div>
 
         <!--This is the container that every post will use-->
         <!--Contains an album image on the left side, and a post description container-->
@@ -265,13 +287,6 @@
                     </form>
                     <div class="past-comments" id="comments-list">
                         <!--One of the coolest things, if this is working correctly which it was 12/1/24 10:31, it will load all comments posted regardless of if the page is refreshed or not using MongoDB-->
-                        <div class="past-comments" id="comments-list">
-                            <% posts.forEach(post => { %>
-                              <% post.comments.forEach(comment => { %>
-                                <p><span class="username"><%= comment.username %></span>: <%= comment.text %></p>
-                              <% }) %>
-                            <% }) %>
-                          </div>
                     </div>
                 </div>
                 <div class="post-buttons">
@@ -282,6 +297,8 @@
             </div>        
         </section>
         
+
+        <br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>
 
         <!--This is the container for the bottom of the page that has the About and Acknowledgements pages-->
         <section class="bottom-container">
@@ -324,7 +341,9 @@
              document.getElementById('comments-btn').addEventListener('click', function() { 
                 document.getElementById('caption').style.display = 'none';
                 document.getElementById('comments').style.display = 'block';
-             }); 
-        </script> 
+             });
+             
+            
+        </script>         
     </body>
 </html>
