@@ -21,16 +21,19 @@ const upload = multer({ storage });
 // Function to render the index page with posts
 async function renderIndex(req, res, message = null, error = null) {
   try {
-    // Fetch posts (without sorting by createdAt) and reverse them in memory
+    // Fetch posts and reverse them in memory
     const posts = await Post.find();
     const reversedPosts = posts.reverse(); // Reverse the posts array
     const username = req.session.username || null; 
-    res.render('index', { message, error, posts: reversedPosts, username });
+    const userId = req.session.userId || null; // Get userId from session
+    
+    res.render('index', { message, error, posts: reversedPosts, username, userId });
   } catch (err) {
     console.error('Error fetching posts:', err);
     res.status(500).render('index', { error: 'Error fetching posts', message: null, posts: [], username: null });
   }
 }
+
 
 
 // GET route for the home page (only one now)
@@ -46,11 +49,16 @@ router.get('/new', (req, res) => {
 router.post('/', upload.single('image'), async (req, res) => {
   const { description } = req.body;
   const image = req.file.filename;
+  const userId = req.session.userId;
+  const username = req.session.username || 'Anonymous';
 
   try {
     await Post.create({
       image,
       description,
+      username,
+      likedBy: [],
+      likes: 0,
     });
     res.redirect('/');
   } catch (error) {
@@ -58,6 +66,38 @@ router.post('/', upload.single('image'), async (req, res) => {
     res.status(500).send('Error uploading post.');
   }
 });
+
+// POST route for liking a post
+router.post('/like/:postId', async (req, res) => {
+  const postId = req.params.postId;
+  const userId = req.session.userId; // Assuming the user is logged in and their ID is stored in session
+
+  if (!userId) {
+    return res.status(403).send('You must be logged in to like a post');
+  }
+
+  try {
+    const post = await Post.findById(postId);
+
+    if (post.likedBy.includes(userId)) {
+      // User has already liked this post, so unlike it
+      post.likedBy = post.likedBy.filter(user => user.toString() !== userId);
+      post.likes--;
+    } else {
+      // User hasn't liked this post, so like it
+      post.likedBy.push(userId);
+      post.likes++;
+    }
+
+    await post.save();
+
+    res.redirect('/'); // Redirect to the home page after liking/unliking the post
+  } catch (error) {
+    console.error('Error liking the post:', error);
+    res.status(500).send('Error liking the post');
+  }
+});
+
 
 // GET route for login page
 router.get('/login', (req, res) => res.render('login', { message: null }));

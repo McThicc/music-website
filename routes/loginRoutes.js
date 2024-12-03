@@ -17,6 +17,8 @@ router.post('/', async (req, res) => {
       if (!isMatch) {
         return res.render('login', { message: 'Invalid credentials' });
       }
+
+      
   
       // Store user information in session (e.g., username or the entire user object)
       req.session.userId = user._id;

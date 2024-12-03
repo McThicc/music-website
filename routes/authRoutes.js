@@ -24,7 +24,7 @@ router.post('/login', async (req, res) => {
 
     // Save the user session after successful login
     req.session.userId = user._id;
-
+    req.session.username = user.username;
     // Redirect user to dashboard after successful login
     res.redirect('/dashboard');  // You can change this URL to where you want to redirect after login
   } catch (error) {

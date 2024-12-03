@@ -239,8 +239,8 @@
                     </div>
                     <div class="post-content">
                       <div class="user-info">
-                        <p>Posted by: <span class="username">User123</span></p>
-                        <p class="likes-counter">Likes: <span id="likes-count">0</span></p>
+                        <p>Posted by: <span class="username"><%= post.username %></span></p>
+                        <p class="likes-counter">Likes: <span id="likes-count-<%= post._id %>"><%= post.likes %></span></p>
                       </div>
                       <div class="caption-section" id="caption">
                         <p><%= post.description %></p>
@@ -254,7 +254,17 @@
                       </div>
                       <div class="post-buttons">
                         <button id="description-btn">Description</button>
-                        <button id="like-btn">Like</button>
+                        <form action="/like/<%= post._id %>" method="POST">
+                            <% if (username) { %>
+                                <button type="submit" id="like-btn-<%= post._id %>" class="like-btn">
+                                    <% if (post.likedBy && post.likedBy.includes(userId)) { %>
+                                      Unlike
+                                    <% } else { %>
+                                      Like
+                                    <% } %>
+                                  </button>
+                            <% } %>
+                        </form>
                         <button id="comments-btn">Comments</button>
                       </div>
                     </div>
