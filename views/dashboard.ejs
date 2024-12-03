@@ -177,7 +177,7 @@
 </head>
 <body>
 
-    <!-- The top container -->
+    <!--The top logo container that's on every page-->
     <section class="top-container">
         <a href="/" class="logo-container">
             <img class="logo" src="images/logo.jpg" alt="Home">
@@ -185,23 +185,23 @@
     </section>
 
     <br><br><br><br><br>
-    <!-- Side Navigation Bar -->
+    <!--Side Nav bar for some reason, I thougt it was cool, might remove-->
     <div class="side-nav">
         <a href="/dashboard">Dashboard</a>
         <a href="/logout">Logout</a>
     </div>
 
-    <!-- Content Area -->
+    <!--The main user dashboard, there's not really a lot present -->
     <div class="content">
         <h1>Welcome, <%= username %>!</h1>
         <p>This is your user dashboard, something could totally go here</p>
 
-        <!-- Button to go back to the home page -->
+        <!--Allows to return to the home page-->
         <form action="/" method="GET">
             <button class="home-button" type="submit">Go to Home</button>
         </form>
 
-        <!-- Logout functionality -->
+        <!--How the current user can log out if they so choose-->
         <% if (username) { %>
             <form action="/logout" method="POST">
                 <button type="submit" class="logout-button">Logout</button>

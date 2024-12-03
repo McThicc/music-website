@@ -20,9 +20,9 @@ router.post('/', async (req, res) => {
 
       
   
-      // Store user information in session (e.g., username or the entire user object)
+      // Store user information in session
       req.session.userId = user._id;
-      req.session.username = user.username;  // Storing username in session
+      req.session.username = user.username;
   
       res.redirect('/dashboard');
     } catch (error) {

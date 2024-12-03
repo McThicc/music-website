@@ -1,6 +1,6 @@
 const express = require('express');
 const bcrypt = require('bcryptjs');
-const User = require('../model/user'); // Adjust this path according to your project structure
+const User = require('../model/user');
 const router = express.Router();
 
 // POST route for login
@@ -25,8 +25,9 @@ router.post('/login', async (req, res) => {
     // Save the user session after successful login
     req.session.userId = user._id;
     req.session.username = user.username;
+    
     // Redirect user to dashboard after successful login
-    res.redirect('/dashboard');  // You can change this URL to where you want to redirect after login
+    res.redirect('/dashboard');
   } catch (error) {
     console.error(error);
     res.render('login', { message: 'An error occurred during login!' });

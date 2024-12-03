@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
 
-// Middleware to ensure user is logged in (for protected routes)
+// Middleware to ensure user is logged in
 function isAuthenticated(req, res, next) {
   if (!req.session.username) {
     return res.redirect('/login'); // Redirect to login if not logged in

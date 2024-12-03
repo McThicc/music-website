@@ -66,16 +66,16 @@
         }
 
         .post-container { 
-            display:flex;  /* Flexbox layout to align items horizontally */
+            display:flex;  
             width: auto;
-            height: 450px;  /* Ensure the height is consistent */
+            height: 450px;  
             background-image: url('images/backgrounds/1.jpeg');
             background-repeat: no-repeat;
             padding-left: 20px;
             box-shadow: 0 4px 8px rgba(0,0,0,0.1);
             overflow: hidden;
-            justify-content: center;  /* Center content horizontally */
-            align-items: center;  /* Center content vertically */
+            justify-content: center; 
+            align-items: center; 
         }
 
         .image-container {
@@ -85,13 +85,13 @@
         }
 
         .image-container img {
-            width: 100%;  /* Makes the image take up the full width of the container */
-            height: auto;  /* Automatically adjusts height to maintain aspect ratio */
-            max-width: 400px;  /* Maximum width to avoid very large images */
+            width: 100%;
+            height: auto;
+            max-width: 400px;
         }
 
         .post-content { 
-            width: 55%;  /* Takes up 55% of the container's width */
+            width: 55%;
             background-color: rgba(255, 255, 255, 0.8);
             padding: 20px;
             margin-right: 20px;
@@ -131,7 +131,7 @@
         .comments-section {
             display: none; 
             max-height: 160px; 
-            overflow-y: auto; 
+            overflow-y: auto;
         }
 
         .comments-list { 
@@ -146,13 +146,14 @@
             padding: 10px;
             border: 1px solid #ccc;
             border-radius: 4px;
+            margin-bottom: 10px;
         }
 
         .post-buttons {
             display: flex;
             justify-content: flex-start;
             gap: 10px;
-            margin-top: 10px;
+            margin-top: 20px;
         }
 
         .post-buttons button {
@@ -206,6 +207,7 @@
     </style>
 
     <body>
+        <!--The top logo container that's on every page-->
         <!--The top container has the logo (which is also the home button), the website's title, and sign up and login buttons-->
         <section class="top-container">
             <div class="logo-container">
@@ -218,6 +220,7 @@
                 <h1>Insert Title Here :)</h1>
             </div>
 
+            <!--If the user hasn't logged in yet, this shows a login or sign up option, if they are logged in this shows a create post button and user dashboard button-->
             <div class="menu-container">
                 <% if (username) { %>
                     <a class="menu-button" href="/posts/new">Post</a>
@@ -230,31 +233,48 @@
         </section>
 
         <br><br><br><br><br><br><br><br><br><br>
+        <!--Dynamically fetches every post that has been posted and displays them in a row, if you are logged in, you can read the description, like and leave a comment on any post, if you are logged out, you can read the description and see the current comments and likes on that post only-->
         <div class="posts">
             <% posts.forEach(post => { %>
                 <section class="post-container">
 
                     <div class="image-container">
+                      <!--Displays the album cover posted by the user-->
                       <img class="album-image" src="/uploads/<%= post.image %>" alt="album cover">
                     </div>
                     <div class="post-content">
                       <div class="user-info">
+                        <!--Obtains the username of the person who posted this-->
                         <p>Posted by: <span class="username"><%= post.username %></span></p>
                         <p class="likes-counter">Likes: <span id="likes-count-<%= post._id %>"><%= post.likes %></span></p>
                       </div>
                       <div class="caption-section" id="caption">
+                        <!--Displays the description the user gave the post-->
                         <p><%= post.description %></p>
                       </div>
                       <div class="comments-section" id="comments">
-                        <form action="/post" method="POST">
-                          <input type="text" id="comments" name="comments" placeholder="Write your comments here!">
-                          <button type="submit" class="post-comment-button" id="post-comment">Post</button>
-                        </form>
-                        <div class="past-comments" id="comments-list"></div>
+                        <form action="/post/comment/<%= post._id %>" method="POST">
+                            <!--If the user is logged in, they can leave a comment-->
+                            <% if (username) { %>
+                                <input type="text" id="comments" name="comments" placeholder="Write your comments here!">
+                                <br>
+                                <button type="submit" class="post-comment-button" id="post-comment">Post</button>
+                            <% } %>
+                        </form>                        
+                        <div class="past-comments" id="comments-list">
+                            <!--Fetches every existing comment on a post and displays it-->
+                            <% if (post.comments && post.comments.length > 0) { %>
+                                <% post.comments.forEach(comment => { %>
+                                  <p><strong><%= comment.username %></strong>: <%= comment.content %></p>
+                                <% }) %>
+                              <% } else { %>
+                            <% } %>
+                        </div>
                       </div>
                       <div class="post-buttons">
                         <button id="description-btn">Description</button>
                         <form action="/like/<%= post._id %>" method="POST">
+                            <!--If the user is logged in, they can leave a like on a post, otherwise the user can only see the current number of likes-->
                             <% if (username) { %>
                                 <button type="submit" id="like-btn-<%= post._id %>" class="like-btn">
                                     <% if (post.likedBy && post.likedBy.includes(userId)) { %>
@@ -265,7 +285,7 @@
                                   </button>
                             <% } %>
                         </form>
-                        <button id="comments-btn">Comments</button>
+                        <button class="comments-btn">Comments</button>
                       </div>
                     </div>
                 </section>
@@ -276,8 +296,8 @@
         <!--This is the container that every post will use-->
         <!--Contains an album image on the left side, and a post description container-->
         <!--The post description container has the user's name with a like count, a text box for the user to post a description and interactive buttons for users-->
+        <!--Slightly outdated because this was my original container before implementing the dynamic information so may be slightly structured differently than the one above-->
         <section class="post-container">
-
             <div class="image-container">
                 <img class="album-image" src="images/albums/pink-floyd.jpeg" alt="tame-impala">
             </div>
@@ -297,6 +317,7 @@
                     </form>
                     <div class="past-comments" id="comments-list">
                         <!--One of the coolest things, if this is working correctly which it was 12/1/24 10:31, it will load all comments posted regardless of if the page is refreshed or not using MongoDB-->
+                        <!--As of 12/03/24 1:04 it was broken for a hot minute but now should be working fantastically-->
                     </div>
                 </div>
                 <div class="post-buttons">
@@ -319,41 +340,83 @@
         </section>
 
         <script>
+            document.addEventListener('DOMContentLoaded', function () {
+                // Handle like button toggle for each post
+                document.querySelectorAll('.like-btn').forEach(button => {
+                    button.addEventListener('click', function () {
+                        //Obtains info about the number of likes and whether or not the current user has already liked the post
+                        let likesCount = this.closest('.post-container').querySelector('.likes-counter span');
+                        let currentCount = parseInt(likesCount.innerText);
+                        let isLiked = this.classList.contains('liked'); // Check if it's liked
 
-            let isLiked = false;
+                        // Unlike and Liking the post
+                        if (isLiked) {
+                            likesCount.innerText = currentCount - 1;
+                            this.innerText = "Like";
+                            this.classList.remove('liked');
+                        } else {
+                            likesCount.innerText = currentCount + 1;
+                            this.innerText = "Liked";
+                            this.classList.add('liked');
+                        }
+                    });
+                });
 
-            document.getElementById('like-btn').addEventListener('click', function() { 
-                let likesCount = document.getElementById('likes-count');
-                let likeBtn = document.getElementById('like-btn');
-                let currentCount = parseInt(likesCount.innerText);
+                // Switches between Description and Comments for each post
+                document.querySelectorAll('#description-btn').forEach(button => {
+                    button.addEventListener('click', function () {
+                        let post = this.closest('.post-container');
+                        post.querySelector('.caption-section').style.display = 'block';
+                        post.querySelector('.comments-section').style.display = 'none';
+                    });
+                });
 
-                if (isLiked) {
-                     // Unlike the post
-                    likesCount.innerText = currentCount - 1;
-                    likeBtn.innerText = "Like";
-                    this.classList.remove('liked');
-                    isLiked = false;
-                } else {
-                    // Like the post
-                    likesCount.innerText = currentCount + 1;
-                    likeBtn.innerText = "Liked";
-                    this.classList.add('liked');
-                    isLiked = true;
-                }
+                // Handles switching to the comments tab when you press the comments button, if you're logged in you can also post comments
+                document.querySelectorAll('.comments-btn').forEach(button => {
+                    button.addEventListener('click', function () {
+                        let post = this.closest('.post-container');
+                        let commentsSection = post.querySelector('.comments-section');
+
+                        if (commentsSection.style.display === 'none' || commentsSection.style.display === '') {
+                            commentsSection.style.display = 'block';
+                            captionSection.style.display = 'none';
+                        } else {
+                            commentsSection.style.display = 'none';
+                            captionSection.style.display = 'block';
+                        }
+                    });
+                });
+
+                // Handles posting a new comment for each individual post
+                document.querySelectorAll('.post-comment-button').forEach(button => {
+                    button.addEventListener('click', async (e) => {
+                        e.preventDefault();
+                        const form = e.target.closest('form');
+                        const commentInput = form.querySelector('input[name="comments"]');
+                        const commentsList = form.nextElementSibling;
+                        const postId = form.action.split('/').pop();
+
+                        if (commentInput.value.trim() === "") {
+                            alert("Please write a comment.");
+                            return;
+                        }
+
+                        const response = await fetch(`/post/comment/${postId}`, {
+                            method: 'POST',
+                            headers: { 'Content-Type': 'application/json' },
+                            body: JSON.stringify({ comments: commentInput.value })
+                        });
+
+                        if (response.ok) {
+                            const newComment = await response.json();
+                            commentsList.innerHTML += `<p><strong>${newComment.username}</strong>: ${newComment.content}</p>`;
+                            commentInput.value = ''; // Clears the comment input field after posting a comment
+                        } else {
+                            console.error('Error posting comment');
+                        }
+                    });
+                });
             });
-
-            // Switches between Description and Comments 
-            document.getElementById('description-btn').addEventListener('click', function() { 
-                document.getElementById('caption').style.display = 'block'; 
-                document.getElementById('comments').style.display = 'none';
-             }); 
-             
-             document.getElementById('comments-btn').addEventListener('click', function() { 
-                document.getElementById('caption').style.display = 'none';
-                document.getElementById('comments').style.display = 'block';
-             });
-             
-            
-        </script>         
+        </script>                         
     </body>
 </html>

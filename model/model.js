@@ -20,6 +20,10 @@ const postSchema = new mongoose.Schema({
     type: mongoose.Schema.Types.ObjectId,
     ref: 'User'
   }],
+  comments: [{
+    username: String,
+    content: String
+  }],
 }, { timestamps: true });
 
 postSchema.pre('save', function(next) {
