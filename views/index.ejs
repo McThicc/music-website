@@ -220,8 +220,8 @@
             </div>
 
             <div class="menu-container">
-                <a class="menu-button" href="post.html">Post</a>
                 <% if (username) { %>
+                    <a href="/posts/new" class="menu-button">Post</a>
                     <a class="menu-button" href="/dashboard">Hi, <%= username %>!</a>
                 <% } else { %>
                     <a class="menu-button" href="/login">Login</a>
@@ -230,7 +230,16 @@
             </div>
         </section>
 
-        <br><br><br><br><br><br><br><br>
+        <br><br><br><br>
+        <div class="posts">
+            <% posts.forEach(post => { %>
+              <div class="post">
+                <img src="/uploads/<%= post.image %>" alt="Post image">
+                <p><%= post.description %></p>
+              </div>
+            <% }); %>
+          </div>
+        <br><br><br><br>
 
         <!--This is the container that every post will use-->
         <!--Contains an album image on the left side, and a post description container-->
@@ -256,11 +265,13 @@
                     </form>
                     <div class="past-comments" id="comments-list">
                         <!--One of the coolest things, if this is working correctly which it was 12/1/24 10:31, it will load all comments posted regardless of if the page is refreshed or not using MongoDB-->
-                        <% posts.forEach(post => { %>
-                            <% if (post.comments) { %>
-                                <p><span class="username"></span>: <%= post.comments %></p>
-                            <% } %>
-                        <% }) %>
+                        <div class="past-comments" id="comments-list">
+                            <% posts.forEach(post => { %>
+                              <% post.comments.forEach(comment => { %>
+                                <p><span class="username"><%= comment.username %></span>: <%= comment.text %></p>
+                              <% }) %>
+                            <% }) %>
+                          </div>
                     </div>
                 </div>
                 <div class="post-buttons">

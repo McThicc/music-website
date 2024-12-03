@@ -50,7 +50,7 @@ app.use('/', postRoutes);
 app.use('/login', loginRoutes);
 app.use('/signup', signUpRoutes);
 app.use('/dashboard', dashboardRoutes);
-app.use('/', logoutRoutes);
+app.use('/logout', logoutRoutes);
 
 // Start the server
 const port = process.env.PORT || 3000;
