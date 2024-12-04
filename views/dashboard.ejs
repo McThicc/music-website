@@ -258,9 +258,9 @@
                                 <% } %>
                             </ul>
 
-                            <form action="/delete-post/<%= post._id %>?_method=DELETE" method="POST">
+                            <form action="/dashboard/delete-post/<%= post._id %>?_method=DELETE" method="POST">
                                 <button type="submit" class="delete-button">Delete Post</button>
-                            </form>                      
+                            </form>                                                
                             
                             <small>Posted on <%= post.createdAt.toDateString() %></small>
                         </div>
