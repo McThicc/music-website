@@ -13,10 +13,13 @@
             padding: 0; 
             width: 100%; 
             height: 100%; 
-            background-color:antiquewhite;
+            background-color:#150016;
             text-align: center;
             font-family: Roboto;
             overflow-x: hidden;
+            color: #e3b6b1;
+            color: #ffe3d8;
+            color: white;
         }
 
         a { 
@@ -34,16 +37,20 @@
 
         .top-container {
             position: absolute; 
-            top: 0; 
-            width: 100%; 
+            top: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 90%; 
             height: 80px;
             background-color: rgb(15, 21, 21);
             text-align: center; 
             padding: 10px; 
-            box-shadow: 0 -2px 5px rgba(0,0,0,0.1);
+            box-shadow: 0 -2px 5px rgba(0, 0, 0, 0.1);
             display: flex;
             align-items: center;
             color: white;
+            border: solid #522c5d;
+            border-radius: 24px;
         }
 
         .menu-container {
@@ -66,16 +73,19 @@
         }
 
         .post-container { 
-            display:flex;  
-            width: auto;
-            height: 450px;  
+            display: flex;  
+            width: 95%;
+            height: 450px;
             background-image: url('images/backgrounds/1.jpeg');
             background-repeat: no-repeat;
             padding-left: 20px;
-            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
             overflow: hidden;
             justify-content: center; 
             align-items: center; 
+            margin: 0 auto;
+            border: solid #522c5d;
+            border-radius: 24px; 
         }
 
         .image-container {
@@ -88,11 +98,12 @@
             width: 100%;
             height: auto;
             max-width: 400px;
+            border: solid white;
         }
 
         .post-content { 
             width: 55%;
-            background-color: rgba(255, 255, 255, 0.8);
+            background-color: #845162;
             padding: 20px;
             margin-right: 20px;
             display: flex;
@@ -118,7 +129,6 @@
             padding: 10px;
             font-size: 16px;
             border-radius: 5px;
-            border: 1px solid #ccc;
             width: 100%;
             box-sizing: border-box;
         }
@@ -217,7 +227,7 @@
             </div>
 
             <div class="title-container">
-                <h1>Insert Title Here :)</h1>
+                <h1>Tune Talk</h1>
             </div>
 
             <!--If the user hasn't logged in yet, this shows a login or sign up option, if they are logged in this shows a create post button and user dashboard button-->

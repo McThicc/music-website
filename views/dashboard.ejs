@@ -4,210 +4,271 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Dashboard</title>
-    <style>
-        html, body {
-            margin: 0;
-            padding: 0;
-            width: 100%;
-            height: 100%;
-            background-color: antiquewhite;
-            font-family: 'Roboto', sans-serif;
+        <style>
+            html, body { 
+            margin: 0; 
+            padding: 0; 
+            width: 100%; 
+            height: 100%; 
+            background-color:#150016;
+            text-align: center;
+            font-family: Roboto;
             overflow-x: hidden;
-            color: #333;
+            color: #e3b6b1;
+            color: #ffe3d8;
+            color: white;
         }
 
-        a {
-            text-decoration: none;
+        a { 
+            text-decoration: none; 
             color: inherit;
-            transition: text-shadow 0.3s ease-in-out;
+            transition: text-shadow 0.3s ease-in-out; 
         }
 
-        a:hover {
-            text-shadow: 0 0 10px rgba(255, 255, 255, 0.8),
-                         0 0 20px rgba(255, 255, 255, 0.6),
-                         0 0 30px rgba(255, 255, 255, 0.4),
-                         0 0 40px rgba(255, 255, 255, 0.2);
+        a:hover { 
+            text-shadow:0 0 10px rgba(255, 255, 255, 0.8), 
+                        0 0 20px rgba(255, 255, 255, 0.6), 
+                        0 0 30px rgba(255, 255, 255, 0.4), 
+                        0 0 40px rgba(255, 255, 255, 0.2);
         }
 
         .top-container {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
+            position: absolute; 
+            top: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 90%; 
             height: 80px;
             background-color: rgb(15, 21, 21);
+            text-align: center; 
+            padding: 10px; 
+            box-shadow: 0 -2px 5px rgba(0, 0, 0, 0.1);
+            display: flex;
+            align-items: center;
             color: white;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            padding: 10px;
-            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-            z-index: 10;
+            border: solid #522c5d;
+            border-radius: 24px;
         }
 
-        .logo {
-            height: 80px;
-            cursor: pointer;
-        }
-
-        .menu-container {
-            display: flex;
-            align-items: center;
-            padding-right: 40px;
-        }
-
-        .menu-button {
+        .title-container {
             margin-left: 20px;
-            font-size: 1.2rem;
-            color: white;
-            padding: 10px 20px;
-            border-radius: 5px;
-            background-color: #3498db;
-            transition: background-color 0.3s ease;
-            padding-right: 20px;
         }
 
-        .menu-button:hover {
-            background-color: #2980b9;
-        }
+            .logo {
+                height: 80px;
+                cursor: pointer;
+            }
 
-        /* Side navigation */
-        .side-nav {
-            position: fixed;
-            top: 80px;
-            left: 0;
-            height: calc(100% - 80px);
-            width: 200px;
-            background-color: rgb(15, 21, 21);
-            color: white;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            padding-top: 20px;
-        }
+            .menu-container {
+                display: flex;
+                align-items: center;
+                padding-right: 40px;
+            }
 
-        .side-nav a {
-            padding: 15px 20px;
-            width: 75%;
-            text-align: left;
-            border-bottom: 1px solid #7f8c8d;
-            transition: background-color 0.3s ease;
-        }
+            .menu-button {
+                margin-left: 20px;
+                font-size: 1.2rem;
+                color: white;
+                padding: 10px 20px;
+                border-radius: 5px;
+                background-color: #3498db;
+                transition: background-color 0.3s ease;
+                padding-right: 20px;
+            }
 
-        .side-nav a:hover {
-            background-color: #2980b9;
-        }
+            .menu-button:hover {
+                background-color: #2980b9;
+            }
 
-        .content {
-            margin-left: 220px;
-            padding: 40px;
-            text-align: center;
-        }
+            /* Side navigation */
+            .side-nav {
+                position: fixed;
+                top: 80px;
+                left: 0;
+                height: calc(100% - 80px);
+                width: 200px;
+                background-color: rgb(15, 21, 21);
+                color: white;
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                padding-top: 20px;
+            }
 
-        .content h1 {
-            font-size: 3rem;
-            color: rgb(15, 21, 21);
-            margin-bottom: 20px;
-        }
+            .side-nav a {
+                padding: 15px 20px;
+                width: 75%;
+                text-align: left;
+                border-bottom: 1px solid #7f8c8d;
+                transition: background-color 0.3s ease;
+            }
 
-        .content p {
-            font-size: 1.2rem;
-            color: #7f8c8d;
-            margin-bottom: 40px;
-        }
+            .side-nav a:hover {
+                background-color: #2980b9;
+            }
 
-        .profile-card {
-            background-color: white;
-            border-radius: 10px;
-            padding: 20px;
-            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-            text-align: center;
-            margin-bottom: 40px;
-        }
+            .content {
+                margin-left: 220px;
+                padding: 40px;
+                text-align: center;
+            }
 
-        .profile-card img {
-            border-radius: 50%;
-            width: 80px;
-            height: 80px;
-            object-fit: cover;
-            margin-bottom: 10px;
-        }
+            .content h1 {
+                font-size: 3rem;
+                color: white;
+                margin-bottom: 20px;
+            }
 
-        .profile-card h2 {
-            font-size: 1.5rem;
-            color: rgb(15, 21, 21);
-            margin: 10px 0;
-        }
+            .content p {
+                font-size: 1.2rem;
+                color: #7f8c8d;
+                margin-bottom: 40px;
+            }
 
-        .profile-card p {
-            color: #7f8c8d;
-        }
+            .profile-card {
+                background-color: white;
+                border-radius: 10px;
+                padding: 20px;
+                box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+                text-align: center;
+                margin-bottom: 40px;
+            }
 
-        .home-button {
-            font-size: 1.2rem;
-            padding: 10px 20px;
-            color: white;
-            background-color: #27ae60;
-            border-radius: 5px;
-            border: none;
-            cursor: pointer;
-            transition: background-color 0.3s ease;
-        }
+            .profile-card img {
+                border-radius: 50%;
+                width: 80px;
+                height: 80px;
+                object-fit: cover;
+                margin-bottom: 10px;
+            }
 
-        .home-button:hover {
-            background-color: #2ecc71;
-        }
+            .profile-card h2 {
+                font-size: 1.5rem;
+                color: rgb(15, 21, 21);
+                margin: 10px 0;
+            }
 
-        .logout-button {
-            margin-top: 20px;
-            font-size: 1.2rem;
-            color: white;
-            background-color: #e74c3c;
-            padding: 10px 20px;
-            border-radius: 5px;
-            border: none;
-            cursor: pointer;
-            transition: background-color 0.3s ease;
-        }
+            .profile-card p {
+                color: #7f8c8d;
+            }
 
-        .logout-button:hover {
-            background-color: #c0392b;
-        }
-    </style>
-</head>
-<body>
+            .home-button {
+                font-size: 1.2rem;
+                padding: 10px 20px;
+                color: white;
+                background-color: #27ae60;
+                border-radius: 5px;
+                border: none;
+                cursor: pointer;
+                transition: background-color 0.3s ease;
+            }
 
-    <!--The top logo container that's on every page-->
-    <section class="top-container">
-        <a href="/" class="logo-container">
-            <img class="logo" src="images/logo.jpg" alt="Home">
-        </a>
-    </section>
+            .home-button:hover {
+                background-color: #2ecc71;
+            }
 
-    <br><br><br><br><br>
-    <!--Side Nav bar for some reason, I thougt it was cool, might remove-->
-    <div class="side-nav">
-        <a href="/dashboard">Dashboard</a>
-        <a href="/logout">Logout</a>
-    </div>
+            .logout-button {
+                margin-top: 20px;
+                font-size: 1.2rem;
+                color: white;
+                background-color: #e74c3c;
+                padding: 10px 20px;
+                border-radius: 5px;
+                border: none;
+                cursor: pointer;
+                transition: background-color 0.3s ease;
+            }
 
-    <!--The main user dashboard, there's not really a lot present -->
-    <div class="content">
-        <h1>Welcome, <%= username %>!</h1>
-        <p>This is your user dashboard, something could totally go here</p>
+            .logout-button:hover {
+                background-color: #c0392b;
+            }
 
-        <!--Allows to return to the home page-->
-        <form action="/" method="GET">
-            <button class="home-button" type="submit">Go to Home</button>
-        </form>
+            .post-container {
+                display: grid;
+                grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+                gap: 20px;
+            }
+            .post-card {
+                border: 1px solid #ccc;
+                border-radius: 8px;
+                padding: 20px;
+                text-align: center;
+            }
+            .post-image {
+                width: 100%;
+                height: auto;
+                border-radius: 8px;
+            }
+            .delete-btn {
+                background-color: red;
+                color: white;
+                border: none;
+                padding: 10px 15px;
+                cursor: pointer;
+            }
+        </style>
+    </head>
 
-        <!--How the current user can log out if they so choose-->
-        <% if (username) { %>
-            <form action="/logout" method="POST">
-                <button type="submit" class="logout-button">Logout</button>
-            </form>              
-        <% } %>
-    </div>
+    <body>
+        <!--The top logo container that's on every page-->
+        <section class="top-container">
+            <a href="/" class="logo-container">
+                <img class="logo" src="images/logo.jpg" alt="Home">
+            </a>
+            <div class="title-container">
+                <h1>Tune Talk</h1>
+            </div>
+        </section>
 
-</body>
+        <br><br><br><br><br>
+
+        <!--The main user dashboard, there's not really a lot present -->
+        <div class="content">
+            <h1>Welcome, <%= username %>!</h1>
+            <p>This is your user dashboard, something could totally go here</p>
+
+            <!--Allows to return to the home page-->
+            <form action="/" method="GET">
+                <button class="home-button" type="submit">Go to Home</button>
+            </form>
+
+            <!--How the current user can log out if they so choose-->
+            <% if (username) { %>
+                <form action="/logout" method="POST">
+                    <button type="submit" class="logout-button">Logout</button>
+                </form>              
+            <% } %>
+
+            <h2>Your Posts:</h2>
+            <% if (posts.length > 0) { %>
+                <div class="post-container">
+                    <% posts.forEach(post => { %>
+                        <div class="post-card">
+                            <img src="<%= post.image.startsWith('http') ? post.image : '/uploads/' + post.image %>" alt="Post" class="post-image">
+                            <h3><%= post.description %></h3>
+                            <p><strong>Likes:</strong> <%= post.likes %></p>
+                            
+                            <h4>Comments:</h4>
+                            <ul>
+                                <% if (post.comments && post.comments.length > 0) { %>
+                                    <% post.comments.forEach(comment => { %>
+                                      <p><strong><%= comment.username %></strong>: <%= comment.content %></p>
+                                    <% }) %>
+                                  <% } else { %>
+                                <% } %>
+                            </ul>
+
+                            <form action="/delete-post/<%= post._id %>?_method=DELETE" method="POST">
+                                <button type="submit" class="delete-button">Delete Post</button>
+                            </form>                      
+                            
+                            <small>Posted on <%= post.createdAt.toDateString() %></small>
+                        </div>
+                    <% }) %>
+                </div>
+            <% } else { %>
+                <p>You have not made any posts yet.</p>
+            <% } %>
+        </div>
+    </body>
 </html>

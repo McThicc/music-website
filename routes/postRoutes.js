@@ -112,7 +112,7 @@ router.post('/post/comment/:id', async (req, res) => {
 
     // Add the new comment
     post.comments.push({
-      username: req.session.username || 'Anonymous',
+      username: req.session.username,
       content: comments,
     });
 

@@ -1,3 +1,4 @@
+const os = require('os');
 const express = require('express');
 const session = require('express-session');
 
@@ -10,6 +11,9 @@ const signUpRoutes = require('./routes/signUpRoutes');
 const dashboardRoutes = require('./routes/dashboardRoutes');
 const logoutRoutes = require('./routes/logoutRoutes');
 const User = require('./model/user');
+
+const methodOverride = require('method-override');
+
 
 require('dotenv').config();
 
@@ -26,6 +30,8 @@ app.use(express.static(path.join(__dirname, 'public')));
 // Set the view engine to EJS (makes the html pages work)
 app.set('view engine', 'ejs');
 app.set('views', './views');
+
+app.use(methodOverride('_method'));
 
 // Session configuration
 app.use(session({
@@ -57,8 +63,26 @@ app.use('/dashboard', dashboardRoutes);
 app.use('/logout', logoutRoutes);
 app.use('/posts', postRoutes);
 
+/*function getLocalIp() {
+  const networkInterfaces = os.networkInterfaces();
+  for (let interface in networkInterfaces) {
+    for (let address of networkInterfaces[interface]) {
+      if (address.family === 'IPv4' && !address.internal) {
+        return address.address;
+      }
+    }
+  }
+  return '127.0.0.1'; // Fallback to localhost if no IP found
+}
+
+const localIp = getLocalIp();
+app.listen(port, '0.0.0.0', () => {
+  console.log(`Server running at http://${localIp}:${port}`);
+});
+*/
+
 // Starts the server
-const port = process.env.PORT || 3000;
+const port = 3000;
 app.listen(port, (err) => {
   if (err) {
     console.log(err);
